@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  </head>
+  <body>
+    <h1>{{name}}</h1>
+    <p>
+      {{price}}
+    </p>
+    {{#instock}}
+      <button type="submit" name="inbasket">kaufen!</button>
+    {{/instock}}
+    {{^instock}}
+      <b>Nicht auf Lager!</b>
+    {{/instock}}
+    <div style="clear:both;"></div>
+    <p>{{description}}</p>
+  </body>
+</html>
