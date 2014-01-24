@@ -22,12 +22,12 @@ var routes = {
 
 routes['/'] = routes['test1'];
 
-app.get('/:ressource?', function (req, res) {
-    var ressource = req.params.ressource || '/';
-    var route = routes[ressource];
+app.get('/:resource?', function (req, res) {
+    var resource = req.params.resource || '/';
+    var route = routes[resource];
 
     if (!route) {
-        //404
+    	res.send(404, "no route found for '" + resource + "'.");
         res.end();
         return;
     }
@@ -37,13 +37,25 @@ app.get('/:ressource?', function (req, res) {
         controller = productcontroller;
         template = producttemplate;
     } else {
-        //404
+    	res.send(500, "'" + resource + "' has an unknown type '" + route.type + "'.");
         res.end();
         return;
     }
+    
+    var data;
+    try {
+    	data = controller.getData(route.id);
+    }
+    catch( e ) {
+    	res.send(500, e);
+    	res.end();
+    	return;
+    }
 
-    var stream = MustacheEngine.compileAndRender(template, controller.getData(route.id));
+    var stream = MustacheEngine.compileAndRender(template, data);
     stream.pipe(res);
 });
 
-app.listen(8000);
+var port = 8000;
+console.log("listening on port "+port);
+app.listen(port);
