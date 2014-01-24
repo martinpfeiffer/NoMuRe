@@ -1,3 +1,6 @@
+/*jslint node:true, vars:true*/
+'use strict';
+
 // Load required modules
 var MustacheEngine = require('mu2'); // mu2 is a fast mustache engine
 
@@ -20,7 +23,7 @@ var routes = {
     }
 };
 
-routes['/'] = routes['test1'];
+routes['/'] = routes.test1;
 
 app.get('/:ressource?', function (req, res) {
     var ressource = req.params.ressource || '/';
