@@ -10,7 +10,8 @@
     "url": "https://github.com/bweisse/renderMustache.git"
   },
   "dependencies": {
-    "mu2": "*"
+    "mu2": "*",
+    "express": "3.*"
   },
   "devDependencies": {},
   "analyze": false,

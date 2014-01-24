@@ -1,10 +1,9 @@
 // Load required modules
 var MustacheEngine = require('mu2'); // mu2 is a fast mustache engine
-var http           = require('http');
 
 MustacheEngine.root = 'templates';
 
-var staticFile  = 'product.html';
+var staticFile = 'product.html';
 var productMock = {
     'price': '123,45 €',
     'name': 'Fancy Product',
@@ -12,10 +11,12 @@ var productMock = {
     'instock': true
 };
 
+var express = require('express');
+var app = express();
 
-http.createServer(function (req, res) {
-
+app.get('/', function (req, res) {
     var stream = MustacheEngine.compileAndRender(staticFile, productMock);
     stream.pipe(res);
+});
 
-}).listen(8000);
+app.listen(8000);
