@@ -1,9 +1,10 @@
+/*jslint node:true, vars:true*/
+'use strict';
+
 // Load required modules
 var MustacheEngine = require('mu2'); // mu2 is a fast mustache engine
+var fs = require('fs');
 
-MustacheEngine.root = 'templates';
-
-var producttemplate = 'product.html';
 var productcontroller = require('./controller/product');
 
 var express = require('express');
@@ -20,14 +21,15 @@ var routes = {
     }
 };
 
-routes['/'] = routes['test1'];
+routes['/'] = routes.test1;
 
-app.get('/:ressource?', function (req, res) {
-    var ressource = req.params.ressource || '/';
-    var route = routes[ressource];
+app.get('/:resource?/:view?', function (req, res) {
+    var resource = req.params.resource || '/';
+    var view = req.params.view || 'view';
+    var route = routes[resource];
 
     if (!route) {
-        //404
+        res.send(404, "no route found for '" + resource + "'.");
         res.end();
         return;
     }
@@ -35,15 +37,35 @@ app.get('/:ressource?', function (req, res) {
     var controller, template;
     if (route.type === 'product') {
         controller = productcontroller;
-        template = producttemplate;
     } else {
-        //404
+        res.send(500, "'" + resource + "' has an unknown type '" + route.type + "'.");
         res.end();
         return;
     }
 
-    var stream = MustacheEngine.compileAndRender(template, controller.getData(route.id));
-    stream.pipe(res);
+    var data;
+    try {
+        data = controller.getData(route.id);
+    } catch (e) {
+        res.send(500, e);
+        res.end();
+        return;
+    }
+
+    template = './templates/' + route.type + '/' + view + '.html';
+
+    fs.stat(template, function (err, stat) {
+        if (err || !stat.isFile()) {
+            res.send(500, err || template + ' is no file.');
+            res.end();
+            return;
+        }
+
+        var stream = MustacheEngine.compileAndRender(template, data);
+        stream.pipe(res);
+    });
 });
 
-app.listen(8000);
+var port = 8000;
+console.log("listening on port " + port);
+app.listen(port);
