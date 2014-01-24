@@ -1,21 +1,49 @@
 // Load required modules
 var MustacheEngine = require('mu2'); // mu2 is a fast mustache engine
-var http           = require('http');
 
 MustacheEngine.root = 'templates';
 
-var staticFile  = 'product.html';
-var productMock = {
-    'price': '123,45 €',
-    'name': 'Fancy Product',
-    'description': 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet',
-    'instock': true
+var producttemplate = 'product.html';
+var productcontroller = require('./controller/product');
+
+var express = require('express');
+var app = express();
+
+var routes = {
+    'test1': {
+        'type': 'product',
+        'id': '1'
+    },
+    'test2': {
+        'type': 'product',
+        'id': '2'
+    }
 };
 
+routes['/'] = routes['test1'];
 
-http.createServer(function (req, res) {
+app.get('/:ressource?', function (req, res) {
+    var ressource = req.params.ressource || '/';
+    var route = routes[ressource];
 
-    var stream = MustacheEngine.compileAndRender(staticFile, productMock);
+    if (!route) {
+        //404
+        res.end();
+        return;
+    }
+
+    var controller, template;
+    if (route.type === 'product') {
+        controller = productcontroller;
+        template = producttemplate;
+    } else {
+        //404
+        res.end();
+        return;
+    }
+
+    var stream = MustacheEngine.compileAndRender(template, controller.getData(route.id));
     stream.pipe(res);
+});
 
-}).listen(8000);
+app.listen(8000);
