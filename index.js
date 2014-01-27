@@ -1,15 +1,10 @@
 /*jslint node:true, vars:true, nomen:true*/
 'use strict';
 
-// Load required modules
-var MustacheEngine = require('mu2'); // mu2 is a fast mustache engine
-var fs = require('fs');
-
-var productcontroller = require('./controller/product');
-var categorycontroller = require('./controller/category');
-
 var express = require('express');
 var app = express();
+
+var renderengine = require('./render');
 
 var routes = {
     'test1': {
@@ -28,11 +23,6 @@ var routes = {
         'type': 'category',
         'id': '1'
     }
-};
-
-var controllers = {
-    'product': productcontroller,
-    'category': categorycontroller
 };
 
 routes['/'] = routes.cat1;
@@ -54,39 +44,12 @@ app.get('/:resource?/:view?', function (req, res) {
         return;
     }
 
-    var controller = controllers[route.type];
-
-    if (!controller) {
-        res.send(500, "'" + resource + "' has an unknown type '" + route.type + "'.");
-        res.end();
-        return;
-    }
-
-    var data;
-    try {
-        data = controller.getData(route.id);
-    } catch (e) {
-        res.send(500, e);
-        res.end();
-        return;
-    }
-
-    if (view === 'json') {
-        res.send(JSON.stringify(data));
-        res.end();
-        return;
-    }
-
-    var template = './templates/' + route.type + '/' + view + '.html';
-
-    fs.stat(template, function (err, stat) {
-        if (err || !stat.isFile()) {
-            res.send(500, err || template + ' is no file.');
+    renderengine.render(route.type, view, [route.id], function (err, stream) {
+        if (err) {
+            res.send(500, err);
             res.end();
             return;
         }
-
-        var stream = MustacheEngine.compileAndRender(template, data);
         stream.pipe(res);
     });
 });
