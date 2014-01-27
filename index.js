@@ -4,28 +4,8 @@
 var express = require('express');
 var app = express();
 
+var router = require('./router');
 var renderengine = require('./render');
-
-var routes = {
-    'test1': {
-        'type': 'product',
-        'id': '1'
-    },
-    'test2': {
-        'type': 'product',
-        'id': '2'
-    },
-    'test3': {
-        'type': 'product',
-        'id': '3'
-    },
-    'cat1': {
-        'type': 'category',
-        'id': '1'
-    }
-};
-
-routes['/'] = routes.cat1;
 
 app.use('/static', express.static(__dirname + '/static'));
 
@@ -33,27 +13,28 @@ app.use('/public', express.static(__dirname + '/public'));
 
 app.use(express.logger());
 
-app.get('/:resource?/:view?', function (req, res) {
-    var resource = req.params.resource || '/';
+app.get('/:resource?/:view?.:mode?', function (req, res) {
+    var resource = req.params.resource;
     var view = req.params.view || 'view';
-    var route = routes[resource];
+    var mode = req.params.mode || 'html';
 
-    if (!route) {
-        res.send(404, "no route found for '" + resource + "'.");
-        res.end();
-        return;
-    }
-
-    renderengine.render(route.type, view, [route.id], null, function (err, result) {
+    router.route(resource, function (err, route) {
         if (err) {
             res.send(500, err);
             return res.end();
         }
-        res.send(200, result);
-        return res.end();
+
+        renderengine.render(route.type, view, mode, [route.id], null, function (err, result) {
+            if (err) {
+                res.send(500, err);
+                return res.end();
+            }
+            res.send(200, result);
+            return res.end();
+        });
     });
 });
 
 var port = 8000;
-console.log("listening on port " + port);
+console.log('listening on port ' + port);
 app.listen(port);

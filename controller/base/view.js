@@ -5,6 +5,6 @@ var REST = require('../../rest');
 
 exports.getData = function (id) {
     var shop = REST.get('/shop');
-
+    shop.PageTitle = shop.ShopName;
     return shop;
 };

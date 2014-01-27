@@ -36,8 +36,9 @@ var renderTemplate = function (template, data, callback) {
     });
 };
 
-var render = function (controllername, view, params, childdata, callback) {
-    var controller = controllers[controllername + '/' + view];
+var render = function (type, view, mode, params, childdata, callback) {
+    var controllername = type + '/' + view;
+    var controller = controllers[controllername];
 
     if (!controller) {
         return callback("Unknown controller type '" + controllername + "'.");
@@ -50,7 +51,7 @@ var render = function (controllername, view, params, childdata, callback) {
         return callback(e);
     }
 
-    if (view === 'json') {
+    if (mode === 'json') {
         var result = JSON.stringify(data);
         return callback(null, result);
     }
@@ -64,7 +65,7 @@ var render = function (controllername, view, params, childdata, callback) {
     if (base) {
         var basecontrollername = base.controller;
         var baseview = base.view || 'view';
-        render(basecontrollername, baseview, params, data, function (err, basecontent) {
+        render(basecontrollername, baseview, mode, params, data, function (err, basecontent) {
             if (err) {
                 return callback(err);
             }
@@ -72,7 +73,7 @@ var render = function (controllername, view, params, childdata, callback) {
             var tasks = _.map(base.extensions, function (extensiontemplate, extensionname) {
                 var task = new Promise();
 
-                var template = './templates/' + controllername + '/' + extensiontemplate + '.html';
+                var template = './templates/' + type + '/' + extensiontemplate + '.' + mode;
                 renderTemplate(template, data, function (err, extensioncontent) {
                     if (err) {
                         return task.reject(err);
@@ -92,7 +93,7 @@ var render = function (controllername, view, params, childdata, callback) {
             });
         });
     } else {
-        var template = './templates/' + controllername + '/' + view + '.html';
+        var template = './templates/' + type + '/' + view + '.' + mode;
         return renderTemplate(template, data, callback);
     }
 };

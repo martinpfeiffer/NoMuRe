@@ -15,6 +15,6 @@ exports.getData = function (id) {
     var product = REST.get('/products/' + id);
 
     product.ListPrice = product.ListPrice + ' €';
-
+    product.PageTitle = product.Name;
     return product;
 };
