@@ -27,11 +27,11 @@ var routes = {
 
 routes['/'] = routes.cat1;
 
-app.use(express.logger());
-
 app.use('/static', express.static(__dirname + '/static'));
 
 app.use('/public', express.static(__dirname + '/public'));
+
+app.use(express.logger());
 
 app.get('/:resource?/:view?', function (req, res) {
     var resource = req.params.resource || '/';
@@ -44,13 +44,13 @@ app.get('/:resource?/:view?', function (req, res) {
         return;
     }
 
-    renderengine.render(route.type, view, [route.id], function (err, stream) {
+    renderengine.render(route.type, view, [route.id], null, function (err, result) {
         if (err) {
             res.send(500, err);
-            res.end();
-            return;
+            return res.end();
         }
-        stream.pipe(res);
+        res.send(200, result);
+        return res.end();
     });
 });
 

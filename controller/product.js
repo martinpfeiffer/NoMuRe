@@ -2,14 +2,19 @@
 'use strict';
 
 var REST = require('../rest');
-var _ = require('underscore');
+
+exports.base = {
+    'controller': 'base',
+    'view': 'view',
+    'extensions': {
+        'content': 'view'
+    }
+};
 
 exports.getData = function (id) {
     var product = REST.get('/products/' + id);
 
-    var shop = REST.get('/shop');
-
     product.ListPrice = product.ListPrice + ' €';
 
-    return _.extend(product, shop);
+    return product;
 };

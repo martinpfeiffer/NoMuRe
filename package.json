@@ -12,7 +12,8 @@
   "dependencies": {
     "mu2": "*",
     "express": "3.*",
-    "underscore": "*"
+    "underscore": "*",
+    "node-promise": "*"
   },
   "devDependencies": {},
   "analyze": false,

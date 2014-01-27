@@ -1,0 +1,126 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="/static/css/normalize.css" />
+    <link rel="stylesheet" href="/static/css/foundation.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="/static/js/vendor/custom.modernizr.js"></script>
+  </head>
+  <body>
+    <header>
+        <div class="row">
+
+            <div class="logo large-2 medium-6 small-4 columns">
+                <a href="/" title="{{ShopName}} - {{Slogan}}"><img src="{{ShopLogo}}" alt="{{ShopName}} - {{Slogan}}" /></a>
+
+            </div>
+
+            <div class="large-4 large-push-6 medium-6 small-8 columns">
+                <p class="text-right">Your basket is empty.
+                    <span class="fa-stack fa-lg">
+                      <span class="fa fa-circle fa-stack-2x"></span>
+                      <span class="fa fa-shopping-cart fa-stack-1x fa-inverse"></span>
+                    </span>
+                </p>
+            </div>
+
+            <div class="large-6 large-pull-4 columns">
+                <div class="row collapse">
+                    <div class="small-10 columns">
+                        <input type="text" placeholder="Search" />
+                    </div>
+                    <div class="small-2 columns"> <a href="#" class="button prefix">&nbsp;<span class="fa fa-search"></span>&nbsp;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="row navigation">
+        <div class="large-12 columns">
+            <nav class="top-bar">
+                <ul class="title-area">
+                    <!-- Title Area -->
+                    <li class="name"><h1><a href="#">Navigation</a></h1></li>
+                    <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                    <li class="toggle-topbar menu-icon">    <a href="#"><span>Menu</span></a>
+
+                    </li>
+                </ul>
+                <section class="top-bar-section">
+                    <!-- Left Nav Section -->
+                    <ul class="left">
+                        {{#Categories}}
+                        <li class="divider"></li>
+                        <li class="active"><a href="{{Link}}">{{Name}}</a>
+                        </li>
+                        {{/Categories}}
+                    </ul>
+                </section>
+            </nav>
+        </div>
+    </div>
+
+    {*content*}
+
+    <footer>
+        <hr />
+        <div class="row">
+
+            <div class="medium-4 large-4 columns">
+                 <h6>Company Information:</h6>
+
+                <ul class="no-bullet">
+                    <li id="dr_aboutUs"><a href="http://www.bang-olufsen.com/about-us" target="_blank" title="About Us">About Us</a>
+
+                    </li>
+                    <li id="dr_policies"><a href="http://beoplay.com/privacy-policy" target="_blank" title="Privacy Policy">Privacy Policy</a>
+
+                    </li>
+                    <li id="dr_intlGuarantee"><a href="http://beoplay.com/support/limited_warranty" target="_blank" title="Limited Warranty">Limited Warranty</a>
+
+                    </li>
+                    <li id="dr_termsAndConditions"><a href="/store/bangoleu/en_GB/DisplayTermsAndConditionsPage" title="Terms And Conditions">Terms And Conditions</a>
+
+                    </li>
+                </ul>
+            </div>
+
+            <div class="medium-4 large-4 columns">
+                    <h6>Shopping at {{ShopName}}:</h6>
+
+                <ul class="no-bullet">
+                    <li id="dr_frequentlyAskedQues"><a href="/store/bangoleu/en_GB/DisplayHelpPage" title="Frequently Asked Questions">Frequently Asked Questions</a>
+
+                    </li>
+                    <li id="dr_shipping"><a href="/store/bangoleu/en_GB/DisplayShippingInformationPage" title="Shipping">Shipping</a>
+
+                    </li>
+                    <li id="dr_trackOrder"><a href="/store/bangoleu/en_GB/DisplayCustomerServiceOrderSearchPage" title="Track Your Control">Track Your Control</a>
+
+                    </li>
+                    <li id="dr_returns"><a href="/store/bangoleu/en_GB/DisplayReturnAndCancellationsPage" title="Returns">Returns</a>
+
+                    </li>
+                    <li id="dr_contactUs"><a href="/store/bangoleu/en_GB/DisplayContactFormPage" title="Contact Us">Contact Us</a>
+
+                    </li>
+                </ul>
+            </div>
+
+            <div class="medium-4 large-4 columns">
+                <h6>Payment options:</h6>
+                <ul class="no-bullet">
+                    <li id="dr_pay">
+                        <img src="/static/img/payment_options.png" alt="payment_options" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </footer>
+    <script src="/static/js/require.js" data-main="/static/js/main">
+    </script>
+</body>
+</html>
