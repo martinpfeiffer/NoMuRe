@@ -6,7 +6,6 @@ var MustacheEngine = require('mu2'); // mu2 is a fast mustache engine
 
 MustacheEngine.root = 'templates';
 
-var producttemplate = 'product.html';
 var productcontroller = require('./controller/product');
 
 var express = require('express');
@@ -25,8 +24,9 @@ var routes = {
 
 routes['/'] = routes.test1;
 
-app.get('/:ressource?', function (req, res) {
+app.get('/:ressource?/:view?', function (req, res) {
     var ressource = req.params.ressource || '/';
+    var view = req.params.view || 'view';
     var route = routes[ressource];
 
     if (!route) {
@@ -38,15 +38,21 @@ app.get('/:ressource?', function (req, res) {
     var controller, template;
     if (route.type === 'product') {
         controller = productcontroller;
-        template = producttemplate;
     } else {
         //404
         res.end();
         return;
     }
 
-    var stream = MustacheEngine.compileAndRender(template, controller.getData(route.id));
-    stream.pipe(res);
+    template = route.type + '/' + view + '.html';
+
+    try {
+        var stream = MustacheEngine.compileAndRender(template, controller.getData(route.id));
+        stream.pipe(res);
+    } catch (ex) {
+        res.send(500, ex.toString());
+        res.end();
+    }
 });
 
 app.listen(8000);
