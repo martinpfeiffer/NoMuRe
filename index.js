@@ -1,4 +1,4 @@
-/*jslint node:true, vars:true*/
+/*jslint node:true, vars:true, nomen:true*/
 'use strict';
 
 // Load required modules
@@ -27,7 +27,9 @@ var controllers = {
 
 routes['/'] = routes.test1;
 
-app.use('/static', express.static(__dirname + '/public'));
+app.use(express.logger());
+
+app.use('/static', express.static(__dirname + '/static'));
 
 app.get('/:resource?/:view?', function (req, res) {
     var resource = req.params.resource || '/';
