@@ -62,45 +62,36 @@
         </div>
     </div>
 
-    <div class="row hide-for-small-only">
+    <div class="row">
         <div class="large-12 columns">
             <ul class="breadcrumbs">
-
                 <li><a href="/">Home</a></li>
-
-                {{#Category}}
-                <li><a href="{{Link}}">{{Name}}</a></li>
-                {{/Category}}
-
                 <li class="current">{{Name}}</li>
             </ul>
         </div>
     </div>
 
     <div class="row">
-
-        <div class="large-7 medium-6 columns text-center">
-            <img src="{{ImageLarge}}" alt="BeoPlay A8 white" />
+        <div class="large-12 columns">
+            <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+            {{#Products}}
+            <li class="text-center">
+                <a href="{{Link}}">
+                    <img src="{{Image}}" />
+                    <h4>{{Name}}</h4>
+                </a>
+            </li>
+            {{/Products}}
+            {{^Products}}
+            <li class="small-6 small-centered columns text-center">
+                <h3>
+                    <span class="fa fa-ban fa-5x"></span>
+                    <br/>No Products
+                </h3>
+            </li>
+            {{/Products}}
+            </ul>
         </div>
-
-        <div class="large-5 medium-6 columns">
-            <div class="row collapse">
-                <h1>{{Name}}</h1>
-                <ul class="pricing-table">
-                    <li class="price">{{ListPrice}}</li>
-                    <li class="description text-left">{{{Text}}}</li>
-                </ul>
-
-                <div class="small-3 columns">
-                    <input type="text" placeholder="1" />
-                </div>
-
-                <div class="small-9 columns">
-                    <a href="#" class="basketbutton button prefix">Add to basket</a>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <footer>

@@ -6,6 +6,7 @@ var MustacheEngine = require('mu2'); // mu2 is a fast mustache engine
 var fs = require('fs');
 
 var productcontroller = require('./controller/product');
+var categorycontroller = require('./controller/category');
 
 var express = require('express');
 var app = express();
@@ -18,18 +19,29 @@ var routes = {
     'test2': {
         'type': 'product',
         'id': '2'
+    },
+    'test3': {
+        'type': 'product',
+        'id': '3'
+    },
+    'cat1': {
+        'type': 'category',
+        'id': '1'
     }
 };
 
 var controllers = {
-    'product': productcontroller
+    'product': productcontroller,
+    'category': categorycontroller
 };
 
-routes['/'] = routes.test1;
+routes['/'] = routes.cat1;
 
 app.use(express.logger());
 
 app.use('/static', express.static(__dirname + '/static'));
+
+app.use('/public', express.static(__dirname + '/public'));
 
 app.get('/:resource?/:view?', function (req, res) {
     var resource = req.params.resource || '/';
