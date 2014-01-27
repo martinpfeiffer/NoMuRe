@@ -5,11 +5,9 @@ var REST = require('../rest');
 var _ = require('underscore');
 
 exports.getData = function (id) {
-    var product = REST.get('/products/' + id);
+    var category = REST.get('/category/' + id);
 
     var shop = REST.get('/shop');
 
-    product.ListPrice = product.ListPrice + ' €';
-
-    return _.extend(product, shop);
+    return _.extend(category, shop);
 };
