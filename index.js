@@ -27,6 +27,8 @@ var controllers = {
 
 routes['/'] = routes.test1;
 
+app.use('/static', express.static(__dirname + '/public'));
+
 app.get('/:resource?/:view?', function (req, res) {
     var resource = req.params.resource || '/';
     var view = req.params.view || 'view';
