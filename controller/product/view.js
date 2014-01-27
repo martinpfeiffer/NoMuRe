@@ -4,17 +4,17 @@
 var REST = require('../../rest');
 
 exports.base = {
-	'controller': 'base',
-	'view': 'view',
-	'extensions': {
-		'content': 'view'
-	}
+    'controller': 'base',
+    'view': 'view',
+    'extensions': {
+        'content': 'view'
+    }
 };
 
 exports.getData = function (id) {
-	var product = REST.get('/products/' + id);
+    var product = REST.get('/products/' + id);
 
-	product.ListPrice = product.ListPrice + ' €';
+    product.ListPrice = product.ListPrice + ' €';
 
-	return product;
+    return product;
 };

@@ -4,7 +4,7 @@
 var REST = require('../../rest');
 
 exports.getData = function (id) {
-	var shop = REST.get('/shop');
+    var shop = REST.get('/shop');
 
-	return shop;
+    return shop;
 };

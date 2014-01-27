@@ -4,15 +4,15 @@
 var REST = require('../../rest');
 
 exports.base = {
-	'controller': 'base',
-	'view': 'view',
-	'extensions': {
-		'content': 'view'
-	}
+    'controller': 'base',
+    'view': 'view',
+    'extensions': {
+        'content': 'view'
+    }
 };
 
 exports.getData = function (id) {
-	var category = REST.get('/category/' + id);
+    var category = REST.get('/category/' + id);
 
-	return category;
+    return category;
 };
