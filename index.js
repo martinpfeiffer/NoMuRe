@@ -55,6 +55,12 @@ app.get('/:resource?/:view?', function (req, res) {
         return;
     }
 
+    if (view === 'json') {
+        res.send(JSON.stringify(data));
+        res.end();
+        return;
+    }
+
     var template = './templates/' + route.type + '/' + view + '.html';
 
     fs.stat(template, function (err, stat) {
