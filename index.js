@@ -21,6 +21,10 @@ var routes = {
     }
 };
 
+var controllers = {
+    'product': productcontroller
+};
+
 routes['/'] = routes.test1;
 
 app.get('/:resource?/:view?', function (req, res) {
@@ -34,10 +38,9 @@ app.get('/:resource?/:view?', function (req, res) {
         return;
     }
 
-    var controller, template;
-    if (route.type === 'product') {
-        controller = productcontroller;
-    } else {
+    var controller = controllers[route.type];
+
+    if (!controller) {
         res.send(500, "'" + resource + "' has an unknown type '" + route.type + "'.");
         res.end();
         return;
@@ -52,7 +55,7 @@ app.get('/:resource?/:view?', function (req, res) {
         return;
     }
 
-    template = './templates/' + route.type + '/' + view + '.html';
+    var template = './templates/' + route.type + '/' + view + '.html';
 
     fs.stat(template, function (err, stat) {
         if (err || !stat.isFile()) {
