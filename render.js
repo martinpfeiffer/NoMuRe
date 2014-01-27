@@ -7,14 +7,14 @@ var fs = require('fs');
 var _ = require('underscore');
 var promise = require('node-promise');
 
-var basecontroller = require('./controller/base');
-var productcontroller = require('./controller/product');
-var categorycontroller = require('./controller/category');
+var basecontroller = require('./controller/base/view');
+var productcontroller = require('./controller/product/view');
+var categorycontroller = require('./controller/category/view');
 
 var controllers = {
-    'product': productcontroller,
-    'category': categorycontroller,
-    'base': basecontroller
+    'product/view': productcontroller,
+    'category/view': categorycontroller,
+    'base/view': basecontroller
 };
 
 var Promise = promise.Promise;
@@ -37,7 +37,7 @@ var renderTemplate = function (template, data, callback) {
 };
 
 var render = function (controllername, view, params, childdata, callback) {
-    var controller = controllers[controllername];
+    var controller = controllers[controllername + '/' + view];
 
     if (!controller) {
         return callback("Unknown controller type '" + controllername + "'.");
