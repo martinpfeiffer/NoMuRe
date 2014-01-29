@@ -11,10 +11,14 @@ exports.base = {
     }
 };
 
-exports.getData = function (id) {
-    var product = REST.get('/products/' + id);
+exports.getData = function (id, callback) {
+    REST.get('/products/' + id, function (err, product) {
+        if (err) {
+            return callback(err);
+        }
+        product.ListPrice = product.ListPrice + ' €';
+        product.PageTitle = product.Name;
+        callback(null, product);
+    });
 
-    product.ListPrice = product.ListPrice + ' €';
-    product.PageTitle = product.Name;
-    return product;
 };

@@ -11,11 +11,12 @@ var resources = {
     '/category/1': '{"Name": "Category I", "Products": [{\"Name\": \"Fancy Product\", \"Image\": \"/public/eg.jpg\", \"Link\": \"/test1\"}, {\"Name\": \"Fancy Product II\", \"Image\": \"/public/ho.jpg\", \"Link\": \"/test2\"}, {\"Name\": \"Fancy Product III\", \"Image\": \"/public/lt.jpg\", \"Link\": \"/test3\"}]}'
 };
 
-exports.get = function (url) {
+exports.get = function (url, callback) {
     var data = resources[url];
     if (!data) {
-        throw "resource " + url + " not found";
+        return callback('resource ' + url + ' not found ');
     }
-
-    return JSON.parse(data);
+    setTimeout(function () {
+        callback(null, JSON.parse(data));
+    }, 300);
 };

@@ -11,8 +11,11 @@ exports.base = {
     }
 };
 
-exports.getData = function (id) {
-    var category = REST.get('/category/' + id);
-
-    return category;
+exports.getData = function (id, callback) {
+    REST.get('/category/' + id, function (err, category) {
+        if (err) {
+            return callback(err);
+        }
+        callback(null, category);
+    });
 };

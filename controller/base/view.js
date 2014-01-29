@@ -3,8 +3,12 @@
 
 var REST = require('../../rest');
 
-exports.getData = function (id) {
-    var shop = REST.get('/shop');
-    shop.PageTitle = shop.ShopName;
-    return shop;
+exports.getData = function (id, callback) {
+    REST.get('/shop', function (err, shop) {
+        if (err) {
+            return callback(err);
+        }
+        shop.PageTitle = shop.ShopName;
+        callback(null, shop);
+    });
 };
