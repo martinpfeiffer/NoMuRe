@@ -35,7 +35,48 @@ var renderTemplate = function (template, data, callback) {
     });
 };
 
-var render = function (type, view, mode, params, childdata, callback) {
+var render = function (type, view, mode, data, callback) {
+    var controllername = type + '/' + view;
+    var controller = controllers[controllername];
+
+    var base = controller.base;
+
+    if (base) {
+        var basecontrollername = base.controller;
+        var baseview = base.view || 'view';
+
+        render(basecontrollername, baseview, mode, data, function (err, basecontent) {
+            if (err) {
+                return callback(err);
+            }
+
+            var tasks = _.map(base.extensions, function (extensiontemplate, extensionname) {
+                var task = new Promise();
+
+                var template = './templates/' + type + '/' + extensiontemplate + '.' + mode;
+                renderTemplate(template, data, function (err, extensioncontent) {
+                    if (err) {
+                        return task.reject(err);
+                    }
+
+                    // replace extensions in basecontent
+                    basecontent = basecontent.replace('{*' + extensionname + '*}', extensioncontent);
+                    task.resolve();
+                });
+
+                return task;
+            });
+            promise.all(tasks).then(function () {
+                callback(null, basecontent);
+            }, callback);
+        });
+    } else {
+        var template = './templates/' + type + '/' + view + '.' + mode;
+        return renderTemplate(template, data, callback);
+    }
+};
+
+var getData = function (type, view, mode, params, callback) {
     var controllername = type + '/' + view;
     var controller = controllers[controllername];
 
@@ -43,56 +84,53 @@ var render = function (type, view, mode, params, childdata, callback) {
         return callback('Unknown controller type "' + controllername + '".');
     }
 
-    var datacallback = function (err, data) {
+    var currentcontroller = controller;
+    var basecontrollername, basecontroller, base, datatask;
+    var tasks = [];
+
+    var createCallback = function (datatask) {
+        return function (err, data) {
+            if (err) {
+                return datatask.reject(err);
+            }
+            datatask.resolve(data);
+        };
+    };
+
+    while (currentcontroller) {
+        datatask = new Promise();
+        tasks.push(datatask);
+        currentcontroller.getData.apply(currentcontroller, params.concat(createCallback(datatask)));
+
+        base = currentcontroller.base;
+        if (base) {
+            basecontrollername = base.controller + '/' + (base.view || 'view');
+            basecontroller = controllers[basecontrollername];
+        } else {
+            basecontroller = undefined;
+        }
+
+        currentcontroller = basecontroller;
+    }
+    promise.all(tasks).then(function (results) {
+        var data = _.extend.apply(_, results.reverse());
+        callback(null, data);
+    }, callback);
+};
+
+var display = function (type, view, mode, params, callback) {
+    getData(type, view, mode, params, function (err, data) {
+        if (err) {
+            return callback(err);
+        }
 
         if (mode === 'json') {
             var result = JSON.stringify(data);
             return callback(null, result);
         }
 
-        if (childdata) {
-            data = _.extend(data, childdata);
-        }
-
-        var base = controller.base;
-
-        if (base) {
-            var basecontrollername = base.controller;
-            var baseview = base.view || 'view';
-            render(basecontrollername, baseview, mode, params, data, function (err, basecontent) {
-                if (err) {
-                    return callback(err);
-                }
-
-                var tasks = _.map(base.extensions, function (extensiontemplate, extensionname) {
-                    var task = new Promise();
-
-                    var template = './templates/' + type + '/' + extensiontemplate + '.' + mode;
-                    renderTemplate(template, data, function (err, extensioncontent) {
-                        if (err) {
-                            return task.reject(err);
-                        }
-
-                        // replace extensions in basecontent
-                        basecontent = basecontent.replace('{*' + extensionname + '*}', extensioncontent);
-                        task.resolve();
-                    });
-
-                    return task;
-                });
-                promise.all(tasks).then(function () {
-                    callback(null, basecontent);
-                }, function (err) {
-                    callback(err);
-                });
-            });
-        } else {
-            var template = './templates/' + type + '/' + view + '.' + mode;
-            return renderTemplate(template, data, callback);
-        }
-    };
-
-    controller.getData.apply(controller, params.concat(datacallback));
+        render(type, view, mode, data, callback);
+    });
 };
 
-exports.render = render;
+exports.render = display;

@@ -24,7 +24,7 @@ app.get('/:resource?/:view?.:mode?', function (req, res) {
             return res.end();
         }
 
-        renderengine.render(route.type, view, mode, [route.id], null, function (err, result) {
+        renderengine.render(route.type, view, mode, [route.id], function (err, result) {
             if (err) {
                 res.send(500, err);
                 return res.end();
