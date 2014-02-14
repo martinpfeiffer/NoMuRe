@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="large-12 columns">
+        <ul class="breadcrumbs">
+            <li><a href="/">Home</a></li>
+            <li class="current">{{Name}}</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="large-12 columns">
+        <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+        {{#Products}}
+        <li class="text-center">
+            <a href="{{Link}}">
+                <img src="{{Image}}" />
+                <h4>{{Name}}</h4>
+            </a>
+        </li>
+        {{/Products}}
+        {{^Products}}
+        <li class="small-6 small-centered columns text-center">
+            <h3>
+                <span class="fa fa-ban fa-5x"></span>
+                <br/>No Products
+            </h3>
+        </li>
+        {{/Products}}
+        </ul>
+    </div>
+</div>

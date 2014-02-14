@@ -1,0 +1,40 @@
+<div class="row hide-for-small-only">
+    <div class="large-12 columns">
+        <ul class="breadcrumbs">
+
+            <li><a href="/">Home</a></li>
+
+            {{#Category}}
+            <li><a href="{{Link}}">{{Name}}</a></li>
+            {{/Category}}
+
+            <li class="current">{{Name}}</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="large-7 medium-6 columns text-center">
+        <img src="{{ImageLarge}}" alt="BeoPlay A8 white" />
+    </div>
+
+    <div class="large-5 medium-6 columns">
+        <div class="row collapse">
+            <h1>{{Name}}</h1>
+            <ul class="pricing-table">
+                <li class="price">{{ListPrice}}</li>
+                <li class="description text-left">{{{Text}}}</li>
+            </ul>
+
+            <div class="small-3 columns">
+                <input type="text" placeholder="1" />
+            </div>
+
+            <div class="small-9 columns">
+                <a href="#" class="basketbutton button prefix">Add to basket</a>
+            </div>
+        </div>
+    </div>
+
+</div>

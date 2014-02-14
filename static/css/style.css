@@ -1,0 +1,21 @@
+body {
+	min-width: 320px;
+}
+
+header,
+footer {
+	margin: 1.5em 0 1em;
+}
+
+.row {
+	margin-bottom: 1.5em;
+}
+
+@media only screen and (max-width: 64.063em) {
+	.logo {
+		margin-bottom: 1em;
+	}
+	header {
+		margin-bottom: -1.5em;
+	}
+}
