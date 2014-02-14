@@ -1,0 +1,23 @@
+{
+  "name": "renderMustache",
+  "preferGlobal": false,
+  "version": "0.0.1",
+  "author": "Bengt Weiße",
+  "description": "a simple template rendering solution",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bweisse/renderMustache.git"
+  },
+  "dependencies": {
+    "mu2": "*",
+    "express": "3.*",
+    "underscore": "*",
+    "node-promise": "*"
+  },
+  "devDependencies": {},
+  "analyze": false,
+  "engines": {
+    "node": ">=0.10"
+  }
+}
