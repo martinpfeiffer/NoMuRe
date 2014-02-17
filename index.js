@@ -4,6 +4,8 @@
 var express = require('express');
 var app = express();
 
+var templatecache = false;
+
 var router = require('./router');
 var renderengine = require('./render');
 
@@ -12,6 +14,10 @@ app.use('/static', express.static(__dirname + '/static'));
 app.use('/public', express.static(__dirname + '/public'));
 
 app.use(express.logger());
+
+app.configure('production', function () {
+    templatecache = true;
+});
 
 app.get('/:resource?/:view?.:mode?', function (req, res) {
     var resource = req.params.resource;
@@ -22,6 +28,10 @@ app.get('/:resource?/:view?.:mode?', function (req, res) {
         if (err) {
             res.send(500, err);
             return res.end();
+        }
+
+        if (!templatecache) {
+            renderengine.clearCache();
         }
 
         renderengine.render(route.type, view, mode, [route.id], function (err, result) {
