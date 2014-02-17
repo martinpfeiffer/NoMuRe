@@ -18,6 +18,10 @@ var controllers = {
 
 var Promise = promise.Promise;
 
+var clearCache = function () {
+    MustacheEngine.clearCache();
+};
+
 var renderTemplate = function (template, data, callback) {
     fs.stat(template, function (err, stat) {
         if (err || !stat.isFile()) {
@@ -134,3 +138,5 @@ var display = function (type, view, mode, params, callback) {
 };
 
 exports.render = display;
+
+exports.clearCache = clearCache;
